@@ -1,10 +1,11 @@
-[gd_resource type="TileSet" load_steps=8 format=2]
+[gd_resource type="TileSet" load_steps=9 format=2]
 
 [ext_resource path="res://CustomTilemap.gd" type="Script" id=1]
 [ext_resource path="res://tile/rock_gray.png" type="Texture" id=2]
 [ext_resource path="res://tile/square.png" type="Texture" id=3]
 [ext_resource path="res://tile/upspike.png" type="Texture" id=4]
 [ext_resource path="res://tile/bridge.png" type="Texture" id=5]
+[ext_resource path="res://tile/brick.png" type="Texture" id=6]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
@@ -101,4 +102,18 @@ points = PoolVector2Array( 8, 8, 0, 8, 1.87769, 1.74789, 5.96674, 1.68298 )
 3/shape_one_way_margin = 0.0
 3/shapes = [  ]
 3/z_index = -2
+4/name = "brick.png 4"
+4/texture = ExtResource( 6 )
+4/tex_offset = Vector2( 0, 0 )
+4/modulate = Color( 1, 1, 1, 1 )
+4/region = Rect2( 0, 0, 8, 8 )
+4/tile_mode = 0
+4/occluder_offset = Vector2( 0, 0 )
+4/navigation_offset = Vector2( 0, 0 )
+4/shape_offset = Vector2( 0, 0 )
+4/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+4/shape_one_way = false
+4/shape_one_way_margin = 0.0
+4/shapes = [  ]
+4/z_index = 0
 script = ExtResource( 1 )

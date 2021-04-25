@@ -99,9 +99,6 @@ end_position = NodePath("Position2D")
 [node name="Position2D" type="Position2D" parent="Node2D3"]
 position = Vector2( 0, -40 )
 
-[node name="Lever" parent="Node2D3" instance=ExtResource( 8 )]
-position = Vector2( 12, -8 )
-
 [node name="Node2D4" parent="." instance=ExtResource( 5 )]
 position = Vector2( 312, 132 )
 end_position = NodePath("Position2D")

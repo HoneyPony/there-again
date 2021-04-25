@@ -42,12 +42,49 @@ var is_dead = false
 
 onready var spring_col = get_node("SpringDetect/Col")
 
+var JumpPuff = preload("res://JumpPuff.tscn")
+var StepPuff1 = preload("res://StepPuff1.tscn")
+var StepPuff2 = preload("res://StepPuff2.tscn")
+var StepPuff3 = preload("res://StepPuff3.tscn")
+var StepPuff4 = preload("res://StepPuff4.tscn")
+
+func get_step_puff():
+	var puffs = [StepPuff1, StepPuff2, StepPuff3, StepPuff4]
+	puffs.shuffle()
+	var p = puffs[0].instance()
+	return p
+	
+func puffpos(node):
+	var x = node.position.x
+	if facing_sign < 0:
+		x = -x
+		
+	return global_position + Vector2(x, node.position.y)
+
+func stepfx1():
+	var p = get_step_puff()
+	p.position = puffpos($StepLoc1)
+	p.get_node("Sprite").flip_h = randf() < 0.5
+	get_parent().add_child(p)
+	
+func stepfx2():
+	var p = get_step_puff()
+	p.position = puffpos($StepLoc2)
+	p.get_node("Sprite").flip_h = randf() < 0.5
+	get_parent().add_child(p)
+
 func begin_control_jump(amount = 0):
 	if amount == 0:
 		amount = total_jump_imp
 	remaining_jump_impulse = amount
 	jump_chunk = amount * 0.12
 	velocity.y = 0
+	
+	var puff = JumpPuff.instance()
+	puff.position = position
+	puff.get_node("Sprite").flip_h = randf() < 0.5
+	get_parent().add_child(puff)
+	#$JumpPuff.play("Puff")
 	
 func make_dead():
 	if is_dead:
@@ -56,9 +93,13 @@ func make_dead():
 	is_dead = true
 	Global.reload_level(get_parent())
 
+var coyote_time = 0
+
 func _physics_process(delta):
 	if is_dead:
 		return
+		
+	coyote_time = max(coyote_time - delta, -0.1)
 		
 	spring_col.disabled = velocity.y < 0
 	
@@ -84,6 +125,9 @@ func _physics_process(delta):
 		snap = Vector2.ZERO
 		
 	if is_on_floor():
+		coyote_time = 0.03
+		
+	if coyote_time > 0:
 		if Input.is_action_just_pressed("player_jump"):
 			begin_control_jump()
 			#velocity.y = -total_jump_imp
@@ -174,7 +218,7 @@ func _on_Bounce_body_entered(area):
 	if body.state == 2 and body.move_time > 0.1:
 		body.state = 0
 		body.velocity.x = 0
-		velocity.y = -216
+		velocity.y = -217 #-216
 		#has_double_jump = true
 #		return true
 		
