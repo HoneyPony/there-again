@@ -1,0 +1,90 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://other/lever/lever_arm.png" type="Texture" id=1]
+[ext_resource path="res://other/lever/lever_no_wires.png" type="Texture" id=2]
+[ext_resource path="res://Lever.gd" type="Script" id=3]
+[ext_resource path="res://other/lever/lever_base.png" type="Texture" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 4.54023, 3.83926 )
+
+[sub_resource type="Animation" id=4]
+resource_name = "BeFalse"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite2:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -45.0 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "BecomeFalse"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite2:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 45.0, -45.0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "BecomeTrue"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite2:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -45.0, 45.0 ]
+}
+
+[node name="Lever" type="Area2D"]
+collision_layer = 16
+collision_mask = 16
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="."]
+z_index = 10
+texture = ExtResource( 2 )
+offset = Vector2( 0, 4 )
+
+[node name="Sprite3" type="Sprite" parent="."]
+z_index = -10
+texture = ExtResource( 4 )
+offset = Vector2( 0, 4 )
+
+[node name="Sprite2" type="Sprite" parent="."]
+position = Vector2( 0, 3 )
+rotation = -0.785398
+scale = Vector2( 0.5, 0.5 )
+z_index = 8
+texture = ExtResource( 1 )
+offset = Vector2( 0, -7.5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "BeFalse"
+anims/BeFalse = SubResource( 4 )
+anims/BecomeFalse = SubResource( 2 )
+anims/BecomeTrue = SubResource( 3 )
+[connection signal="body_entered" from="." to="." method="_on_Lever_body_entered"]
