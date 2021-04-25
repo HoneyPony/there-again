@@ -39,8 +39,39 @@ signal lever_is_false
 var player = null
 var kill_the_root = true
 
-#func _ready():
+var music1: AudioStreamPlayer
+var music2: AudioStreamPlayer
+
+var music1_target = -80
+var music2_target = 0
+
+func _ready():
+	call_deferred("setup_music")
 	#call_deferred("reload_level", get_node("/root/Viewer/Viewport/Node2D"))
+
+func setup_music():
+	music1 = get_node("/root/Viewer/Music1")
+	music2 = get_node("/root/Viewer/Music2")
+	
+	music1.play()
+	music2.play()
+	music1.volume_db = -80
+	
+func fade_music():
+	if player.the_flag:
+		music1_target = 0
+		music2_target = -80
+	else:
+		music1_target = -80
+		music2_target = 0
+		
+func fade_to(player, target, delta):
+	var magnitude = abs(player.volume_db)
+	var rate = (magnitude + 3) * delta * 2
+	
+	var dif = rate * sign(target - player.volume_db)
+		
+	player.volume_db = clamp(player.volume_db + dif, -80, 0)
 
 func load_next_level(root_node, kill_root = true):
 	hint_death_count = 0
@@ -81,6 +112,9 @@ var last_invert_time = 0
 
 func _process(delta):
 	last_invert_time = max(last_invert_time - delta, 0)
+	
+	fade_to(music1, music1_target, delta)
+	fade_to(music2, music2_target, delta)
 	
 func invert_lever_state():
 	if last_invert_time > 0:

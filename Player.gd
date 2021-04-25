@@ -23,6 +23,8 @@ func _ready():
 	if the_flag:
 		$Sprite.hide()
 		$Sprite2.show()
+		
+	Global.fade_music()
 
 func get_input():
 	var input = 0
