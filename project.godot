@@ -17,6 +17,8 @@ _global_script_class_icons={
 
 config/name="LD48"
 run/main_scene="res://Viewer.tscn"
+boot_splash/image="res://ui/bootsplash.png"
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
 
 [autoload]

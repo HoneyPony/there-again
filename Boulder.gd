@@ -72,8 +72,10 @@ func _physics_process(delta):
 		var c = get_slide_collision(i)
 		if c.normal.dot(Vector2.LEFT) > 0.5 and sgn > 0:
 			velocity.x = -max_h
+			$Wall.play()
 		if c.normal.dot(Vector2.RIGHT) > 0.5 and sgn < 0:
 			velocity.x = max_h
+			$Wall.play()
 	
 	var angle_vel = velocity.x / 4
 	$Sprite.rotation += angle_vel * delta

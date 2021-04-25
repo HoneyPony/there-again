@@ -42,6 +42,10 @@ func spring_items():
 	var bod = $SpringDetect.get_overlapping_areas()
 	for b in bod:
 		b.get_parent().velocity.y = -300
+		b.get_parent().is_sprung()
+		
+func is_sprung():
+	pass
 
 func _physics_process(delta):
 	

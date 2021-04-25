@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/rock jump maybe 2.wav-22f7f0fd622c68b12dff1b20fab74d9b.sample"
+
+[deps]
+
+source_file="res://sound/rock jump maybe 2.wav"
+dest_files=[ "res://.import/rock jump maybe 2.wav-22f7f0fd622c68b12dff1b20fab74d9b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

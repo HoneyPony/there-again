@@ -1,10 +1,19 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://player/man_walk.png" type="Texture" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
 [ext_resource path="res://player/woman_walk.png" type="Texture" id=3]
 [ext_resource path="res://fx/throw_white.png" type="Texture" id=4]
 [ext_resource path="res://fx/jump_puff.png" type="Texture" id=5]
+[ext_resource path="res://sound/step4.wav" type="AudioStream" id=6]
+[ext_resource path="res://sound/step1.wav" type="AudioStream" id=7]
+[ext_resource path="res://sound/step2.wav" type="AudioStream" id=8]
+[ext_resource path="res://sound/step3.wav" type="AudioStream" id=9]
+[ext_resource path="res://sound/jump.wav" type="AudioStream" id=10]
+[ext_resource path="res://sound/rock jump maybe 2.wav" type="AudioStream" id=11]
+[ext_resource path="res://sound/pickup3.wav" type="AudioStream" id=12]
+[ext_resource path="res://sound/throw.wav" type="AudioStream" id=13]
+[ext_resource path="res://sound/springjump.wav" type="AudioStream" id=14]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.5, 9.5 )
@@ -227,14 +236,14 @@ script = ExtResource( 2 )
 position = Vector2( 0, -12 )
 texture = ExtResource( 1 )
 hframes = 7
-frame = 2
+frame = 1
 
 [node name="Sprite2" type="Sprite" parent="."]
 visible = false
 position = Vector2( 0, -12 )
 texture = ExtResource( 3 )
 hframes = 7
-frame = 2
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0.5, -9.5 )
@@ -318,6 +327,51 @@ position = Vector2( -2, -1 )
 
 [node name="StepLoc2" type="Position2D" parent="."]
 position = Vector2( 3, 0 )
+
+[node name="Step1" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = -12.0
+bus = "FX"
+
+[node name="Step2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = -12.0
+bus = "FX"
+
+[node name="Step3" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+volume_db = -12.0
+bus = "FX"
+
+[node name="Step4" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+volume_db = -12.0
+bus = "FX"
+
+[node name="Jump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+volume_db = 4.0
+bus = "FX"
+
+[node name="SpringJump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+volume_db = 4.0
+bus = "FX"
+
+[node name="RockJump" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+volume_db = -2.0
+bus = "FX"
+
+[node name="Pickup" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+volume_db = -3.0
+bus = "FX"
+
+[node name="Throw2" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 13 )
+volume_db = -4.0
+bus = "FX"
 [connection signal="area_entered" from="Bounce" to="." method="_on_Bounce_body_entered"]
 [connection signal="body_entered" from="Bounce" to="." method="_on_Bounce_body_entered"]
 [connection signal="body_entered" from="Hazard" to="." method="_on_Hazard_body_entered"]

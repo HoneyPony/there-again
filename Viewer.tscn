@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://ui/helper.png" type="Texture" id=1]
 [ext_resource path="res://SceneTransition.tscn" type="PackedScene" id=2]
@@ -13,12 +13,13 @@
 [ext_resource path="res://fx/parallax/nice2.png" type="Texture" id=11]
 [ext_resource path="res://fx/parallax/nice3.png" type="Texture" id=12]
 [ext_resource path="res://fx/parallax/nice0.png" type="Texture" id=13]
-[ext_resource path="res://UI.tscn" type="PackedScene" id=14]
-[ext_resource path="res://ui/play_button.png" type="Texture" id=15]
-[ext_resource path="res://ui/play_button3.png" type="Texture" id=16]
-[ext_resource path="res://ui/play_button2.png" type="Texture" id=17]
+[ext_resource path="res://ui/title2.png" type="Texture" id=14]
+[ext_resource path="res://ui/playbutton_two_3.png" type="Texture" id=15]
+[ext_resource path="res://ui/playbutton_two_2.png" type="Texture" id=16]
+[ext_resource path="res://ui/playbutton_two_1.png" type="Texture" id=17]
 [ext_resource path="res://lmms/main_music_two.ogg" type="AudioStream" id=18]
 [ext_resource path="res://lmms/main_music.ogg" type="AudioStream" id=19]
+[ext_resource path="res://sound/lever.wav" type="AudioStream" id=20]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -52,20 +53,20 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ViewportTexture" id=3]
+[sub_resource type="ViewportTexture" id=2]
 viewport_path = NodePath("Viewport")
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=3]
 resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/my_x = 10.0
 shader_param/my_y = 10.0
 shader_param/tex_x = 10.0
 shader_param/tex_y = 10.0
-shader_param/viewport = SubResource( 3 )
+shader_param/viewport = SubResource( 2 )
 
 [node name="Viewer" type="TextureRect"]
-material = SubResource( 2 )
+material = SubResource( 3 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 1 )
@@ -76,26 +77,43 @@ __meta__ = {
 }
 
 [node name="Menu" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="TextureRect" type="TextureRect" parent="Menu"]
+anchor_left = 0.059
+anchor_top = 0.033
+anchor_right = 0.941
+anchor_bottom = 0.967
+margin_left = -0.416
+margin_top = 0.200001
+margin_right = 0.416077
+margin_bottom = -0.200012
+mouse_filter = 2
+texture = ExtResource( 14 )
+stretch_mode = 6
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
 [node name="TextureButton" type="TextureButton" parent="Menu"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = 289.006
-margin_top = 76.8737
-margin_right = 386.006
-margin_bottom = 130.874
-rect_scale = Vector2( 4, 4 )
-texture_normal = ExtResource( 15 )
-texture_pressed = ExtResource( 16 )
-texture_hover = ExtResource( 17 )
+anchor_left = 0.371
+anchor_top = 0.625
+anchor_right = 0.629
+anchor_bottom = 0.878
+margin_left = 0.0960083
+margin_top = 3.05176e-05
+margin_right = -0.0960083
+margin_bottom = 0.200012
+texture_normal = ExtResource( 17 )
+texture_pressed = ExtResource( 15 )
+texture_hover = ExtResource( 16 )
 expand = true
+stretch_mode = 5
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -108,8 +126,26 @@ script = ExtResource( 3 )
 
 [node name="SceneTransition" parent="Viewport" instance=ExtResource( 2 )]
 
-[node name="UI" parent="Viewport" instance=ExtResource( 14 )]
+[node name="UI" type="Control" parent="Viewport"]
 visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="Viewport/UI"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Viewport/UI/Control"]
+margin_right = 256.0
+margin_bottom = 150.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Viewport"]
 layer = -1
@@ -181,7 +217,24 @@ region_rect = Rect2( 0, 0, 256, 150 )
 
 [node name="Music1" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 19 )
+bus = "Music"
 
 [node name="Music2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 18 )
+bus = "Music"
+
+[node name="Lever" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 20 )
+volume_db = -6.0
+bus = "FX"
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+margin_left = 60.0
+margin_top = 20.0
+margin_right = 964.0
+margin_bottom = 580.0
+mouse_filter = 2
+__meta__ = {
+"_edit_lock_": true
+}
 [connection signal="pressed" from="Menu/TextureButton" to="Viewport" method="_on_TextureButton_pressed"]

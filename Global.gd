@@ -27,6 +27,9 @@ var levels = [
 	preload("res://level/SurfingRockJump2.tscn"),
 	preload("res://level/DelayedRockJump.tscn"),
 	preload("res://level/DelayedRockJump2.tscn"),
+	preload("res://level/EndCutscene.tscn"),
+	preload("res://level/EndCutscene2.tscn")
+	
 ]
 
 var load_root_node = null
@@ -53,9 +56,7 @@ func setup_music():
 	music1 = get_node("/root/Viewer/Music1")
 	music2 = get_node("/root/Viewer/Music2")
 	
-	music1.play()
-	music2.play()
-	music1.volume_db = -80
+	
 	
 func fade_music():
 	if player.the_flag:
@@ -73,7 +74,16 @@ func fade_to(player, target, delta):
 		
 	player.volume_db = clamp(player.volume_db + dif, -80, 0)
 
+func ensure_music_playing():
+	if music1.playing and music2.playing:
+		return
+	music1.play(96)
+	music2.play(96)
+	music1.volume_db = -80
+	
+
 func load_next_level(root_node, kill_root = true):
+	
 	hint_death_count = 0
 	lever_state = false
 	level_id += 1
@@ -108,6 +118,8 @@ func load_trigger():
 	lever_state = false
 	hint_death_count += 1
 	
+	ensure_music_playing()
+	
 var last_invert_time = 0
 
 func _process(delta):
@@ -127,3 +139,5 @@ func invert_lever_state():
 		emit_signal("lever_is_true")
 	else:
 		emit_signal("lever_is_false")
+		
+	get_node("/root/Viewer/Lever").play()

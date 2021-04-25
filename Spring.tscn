@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Spring.gd" type="Script" id=1]
 [ext_resource path="res://other/spring/spring.png" type="Texture" id=2]
+[ext_resource path="res://sound/spring.wav" type="AudioStream" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.98358, 3.98209 )
@@ -106,6 +107,20 @@ tracks/3/keys = {
 "update": 0,
 "values": [ Vector2( 0, -5 ), Vector2( 0, -4 ), Vector2( 0, -3 ), Vector2( 0, -2 ), Vector2( 0, -1 ), Vector2( 0, -3 ), Vector2( 0, -5 ) ]
 }
+tracks/4/type = "audio"
+tracks/4/path = NodePath("Spring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 3 )
+} ],
+"times": PoolRealArray( 0 )
+}
 
 [node name="Node2D" type="KinematicBody2D"]
 collision_layer = 0
@@ -143,3 +158,8 @@ shape = SubResource( 3 )
 autoplay = "Default"
 anims/Default = SubResource( 4 )
 anims/Spring = SubResource( 5 )
+
+[node name="Spring" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = -3.0
+bus = "FX"

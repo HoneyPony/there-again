@@ -12,6 +12,11 @@ export var max_v = 150
 
 onready var camera = get_node("../Camera2D")
 
+export var is_puppet = false
+export var puppet_dir = 0
+export var puppet_jump = false
+var puppet_last_jump = false
+
 var held_item = null
 
 var has_double_jump = true
@@ -25,8 +30,16 @@ func _ready():
 		$Sprite2.show()
 		
 	Global.fade_music()
+	
+func footstep():
+	var arr = [$Step1, $Step2, $Step3, $Step4]
+	arr.shuffle()
+	arr[0].play()
 
 func get_input():
+	if is_puppet:
+		return puppet_dir
+	
 	var input = 0
 	if Input.is_action_pressed("player_left"):
 		input = -1
@@ -69,11 +82,15 @@ func stepfx1():
 	p.get_node("Sprite").flip_h = randf() < 0.5
 	get_parent().add_child(p)
 	
+	footstep()
+	
 func stepfx2():
 	var p = get_step_puff()
 	p.position = puffpos($StepLoc2)
 	p.get_node("Sprite").flip_h = randf() < 0.5
 	get_parent().add_child(p)
+	
+	#sfootstep()
 
 func begin_control_jump(amount = 0):
 	if amount == 0:
@@ -86,6 +103,8 @@ func begin_control_jump(amount = 0):
 	puff.position = position
 	puff.get_node("Sprite").flip_h = randf() < 0.5
 	get_parent().add_child(puff)
+	
+	$Jump.play()
 	#$JumpPuff.play("Puff")
 	
 func make_dead():
@@ -97,6 +116,26 @@ func make_dead():
 
 var coyote_time = 0
 
+func input_just_jump():
+	if is_puppet:
+		return puppet_jump and not puppet_last_jump
+	return Input.is_action_just_pressed("player_jump")
+	
+func input_jump():
+	if is_puppet:
+		return puppet_jump
+	return Input.is_action_pressed("player_jump")
+	
+func input_grab():
+	if is_puppet:
+		return false
+	return Input.is_action_pressed("player_grab")
+	
+func input_release_grab():
+	if is_puppet:
+		return false
+	return Input.is_action_just_released("player_grab")
+
 func _physics_process(delta):
 	if is_dead:
 		return
@@ -106,7 +145,8 @@ func _physics_process(delta):
 	spring_col.disabled = velocity.y < 0
 	
 	if Input.is_key_pressed(KEY_0):
-		make_dead()
+		if not is_puppet:
+			make_dead()
 	
 	var x_in = get_input()
 	if x_in == 0:
@@ -130,18 +170,18 @@ func _physics_process(delta):
 		coyote_time = 0.03
 		
 	if coyote_time > 0:
-		if Input.is_action_just_pressed("player_jump"):
+		if input_just_jump():
 			begin_control_jump()
 			#velocity.y = -total_jump_imp
 			snap = Vector2.ZERO
 		has_double_jump = true	
 	elif the_flag:
 		if has_double_jump:
-			if Input.is_action_just_pressed("player_jump"):
+			if input_just_jump():
 				begin_control_jump()
 				has_double_jump = false
 				
-	if not Input.is_action_pressed("player_jump"):
+	if not input_jump():
 		remaining_jump_impulse = 0
 				
 	if remaining_jump_impulse > 0:
@@ -157,12 +197,18 @@ func _physics_process(delta):
 	
 	velocity = move_and_slide_with_snap(velocity, snap, Vector2.UP)
 	
-	if abs(velocity.x) > 3:
-		$Sprite.flip_h = velocity.x < 0
-		
-		$Sprite2.flip_h = velocity.x < 0
-		
+	if not is_on_floor():
+		if x_in != 0:
+			facing_sign = x_in
+	elif abs(velocity.x) > 3:
 		facing_sign = sign(velocity.x)
+	
+	
+	$Sprite.flip_h = facing_sign < 0
+		
+	$Sprite2.flip_h = facing_sign < 0
+		
+		
 		
 	$Throw.position = Vector2(facing_sign * 7, -9)
 	$Throw.flip_h = facing_sign < 0
@@ -172,18 +218,20 @@ func _physics_process(delta):
 			$AnimationPlayer.play("Up")
 		else:
 			$AnimationPlayer.play("Down")
-	elif abs(velocity.x) > 3:
+	elif abs(velocity.x) > 10:
 		$AnimationPlayer.play("Walk")
 	else:
 		$AnimationPlayer.play("Still")
 		
 	if held_item == null:
-		if Input.is_action_pressed("player_grab"):
+		if input_grab():
 			var bodies = $Hold.get_overlapping_bodies()
 			for b in bodies:
 				if b.state == 0 and b.idle_time > 0.2:
 					held_item = b
 					b.state = 1
+					
+					$Pickup.play()
 					
 					#held_item.get_parent().remove_child(held_item)
 					#add_child(held_item)
@@ -192,13 +240,16 @@ func _physics_process(delta):
 	else:
 		held_item.position = position.round() + Vector2(facing_sign * 4, -8)
 		
-		if Input.is_action_just_released("player_grab"):
+		if input_release_grab():
 			$ThrowAnim.play("Throw")
+			$Throw2.play()
 			
 			#remove_child(held_item)
 			#get_parent().add_child(held_item)
 			#held_item.position = position + Vector2(facing_sign * 4, -8)
 			
+			held_item.position = position.round() + Vector2(0, -8)
+			held_item.move_and_collide(Vector2(facing_sign * 4, 0))
 			held_item.state = 2
 			held_item.velocity.x = held_item.max_h * facing_sign
 			held_item = null
@@ -214,6 +265,11 @@ func _physics_process(delta):
 	
 	if not db.empty() and not ub.empty():
 		make_dead()
+		
+	puppet_last_jump = puppet_jump
+		
+func is_sprung():
+	$SpringJump.play()
 
 func _on_Bounce_body_entered(area):
 	var body = area.get_parent()
@@ -221,6 +277,7 @@ func _on_Bounce_body_entered(area):
 		body.state = 0
 		body.velocity.x = 0
 		velocity.y = -217 #-216
+		$RockJump.play()
 		#has_double_jump = true
 #		return true
 		
