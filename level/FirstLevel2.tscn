@@ -9,13 +9,13 @@
 [ext_resource path="res://RoomCamera.gd" type="Script" id=7]
 [ext_resource path="res://CreateCollisionMap.gd" type="Script" id=8]
 
-[sub_resource type="ConvexPolygonShape2D" id=7]
+[sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
 
-[sub_resource type="ConvexPolygonShape2D" id=8]
+[sub_resource type="ConvexPolygonShape2D" id=2]
 points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
 
-[sub_resource type="TileSet" id=9]
+[sub_resource type="TileSet" id=3]
 0/name = "square.png 0"
 0/texture = ExtResource( 3 )
 0/tex_offset = Vector2( 0, 0 )
@@ -26,14 +26,14 @@ points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
 0/navigation_offset = Vector2( 0, 0 )
 0/shape_offset = Vector2( 0, 0 )
 0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-0/shape = SubResource( 7 )
+0/shape = SubResource( 1 )
 0/shape_one_way = false
 0/shape_one_way_margin = 1.0
 0/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": false,
 "one_way_margin": 1.0,
-"shape": SubResource( 7 ),
+"shape": SubResource( 1 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 0/z_index = 0
@@ -47,29 +47,29 @@ points = PoolVector2Array( 8, 8, 0, 8, 0, 0, 8, 0 )
 1/navigation_offset = Vector2( 0, 0 )
 1/shape_offset = Vector2( 0, 0 )
 1/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-1/shape = SubResource( 8 )
+1/shape = SubResource( 2 )
 1/shape_one_way = true
 1/shape_one_way_margin = 1.0
 1/shapes = [ {
 "autotile_coord": Vector2( 0, 0 ),
 "one_way": true,
 "one_way_margin": 1.0,
-"shape": SubResource( 8 ),
+"shape": SubResource( 2 ),
 "shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
 } ]
 1/z_index = 0
 
-[sub_resource type="RectangleShape2D" id=10]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 16, 16 )
 
-[sub_resource type="DynamicFontData" id=11]
+[sub_resource type="DynamicFontData" id=5]
 antialiased = false
 hinting = 1
 font_path = "res://font/LuckiestGuy.ttf"
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=6]
 extra_spacing_char = 2
-font_data = SubResource( 11 )
+font_data = SubResource( 5 )
 
 [node name="Node2D" type="Node2D"]
 
@@ -87,7 +87,7 @@ the_flag = true
 
 [node name="TileMap2" type="TileMap" parent="."]
 visible = false
-tile_set = SubResource( 9 )
+tile_set = SubResource( 3 )
 cell_size = Vector2( 8, 8 )
 collision_layer = 3
 collision_mask = 3
@@ -96,7 +96,7 @@ script = ExtResource( 8 )
 
 [node name="Bridge" type="TileMap" parent="TileMap2"]
 visible = false
-tile_set = SubResource( 9 )
+tile_set = SubResource( 3 )
 cell_size = Vector2( 8, 8 )
 collision_layer = 66
 collision_mask = 66
@@ -107,7 +107,7 @@ position = Vector2( 920, 144 )
 script = ExtResource( 6 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelEnd"]
-shape = SubResource( 10 )
+shape = SubResource( 4 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -138,7 +138,7 @@ margin_left = 572.0
 margin_top = 184.0
 margin_right = 784.0
 margin_bottom = 211.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 0.862745, 0.862745, 0.862745, 1 )
 text = "jump while in air"
 __meta__ = {

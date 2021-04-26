@@ -156,11 +156,37 @@ func load_trigger():
 	
 var last_invert_time = 0
 
+var skip_cooldown = 0.5
+
 func _process(delta):
+	skip_cooldown = max(skip_cooldown - delta, 0)
+	
 	last_invert_time = max(last_invert_time - delta, 0)
 	
 	fade_to(music1, music1_target, delta)
 	fade_to(music2, music2_target, delta)
+	
+	if player != null:
+		if skip_cooldown <= 0:
+			if Input.is_action_just_pressed("skipf"):
+				var root = player.get_parent()
+				if root != null:
+					if level_id < music_quiet_id:
+						skip_cooldown = 0.8
+						load_next_level(root)
+						
+					
+			if Input.is_action_just_pressed("skipb"):
+				var root = player.get_parent()
+				if root != null:
+					if level_id < music_quiet_id:
+						var ld = level_id - 1
+						if ld >= 0:
+							# weird trick because we're calling load next
+							level_id = ld - 1
+							skip_cooldown = 0.8
+							load_next_level(root)
+							
 	
 func invert_lever_state():
 	if last_invert_time > 0:

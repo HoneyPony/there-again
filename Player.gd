@@ -133,6 +133,9 @@ func begin_control_jump(amount = 0):
 	#$JumpPuff.play("Puff")
 	
 func make_dead():
+	if is_puppet:
+		return
+	
 	if is_dead:
 		return
 	
@@ -169,7 +172,7 @@ func _physics_process(delta):
 		
 	spring_col.disabled = velocity.y < 0
 	
-	if Input.is_key_pressed(KEY_0):
+	if Input.is_action_pressed("restart"):
 		if not is_puppet:
 			make_dead()
 	
