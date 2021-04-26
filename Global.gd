@@ -28,8 +28,8 @@ var levels = [
 	preload("res://level/DelayedRockJump.tscn"),
 	preload("res://level/DelayedRockJump2.tscn"),
 	preload("res://level/EndCutscene.tscn"),
-	preload("res://level/EndCutscene2.tscn")
-	
+	preload("res://level/EndCutscene2.tscn"),
+	preload("res://level/EndCredits.tscn"),
 ]
 
 var load_root_node = null
@@ -48,7 +48,10 @@ var music2: AudioStreamPlayer
 var music1_target = -80
 var music2_target = 0
 
+var music_quiet_id = 0
+
 func _ready():
+	music_quiet_id = levels.size() - 3
 	call_deferred("setup_music")
 	#call_deferred("reload_level", get_node("/root/Viewer/Viewport/Node2D"))
 
@@ -56,9 +59,40 @@ func setup_music():
 	music1 = get_node("/root/Viewer/Music1")
 	music2 = get_node("/root/Viewer/Music2")
 	
+var Viewer = preload("res://Viewer.tscn")
+	
+func load_main(the_root):
+	music1.stop()
+	music2.stop()
+	
+	level_id = 0
+	lever_state = false
+	load_root_node = the_root
+	
+	scene_transition.fade_out(funcref(self, "load_trigger_ui"))
+	
+func load_trigger_ui():
+	if load_root_node == null:
+		return
+	
+	var grandparent = load_root_node.get_parent()
+	#var new_scene = Main.instance()
+	#grandparent.add_child(new_scene)
+	load_root_node.queue_free()
+	
+	scene_transition.fade_in()
+	
+	load_root_node = null
+	
+	get_node("/root/Viewer/Menu").show()
 	
 	
 func fade_music():
+	if level_id >= music_quiet_id:
+		music2_target = -80
+		music1_target = -80
+		return
+	
 	if player.the_flag:
 		music1_target = 0
 		music2_target = -80

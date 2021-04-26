@@ -41,11 +41,15 @@ func handle_springing():
 func spring_items():
 	var bod = $SpringDetect.get_overlapping_areas()
 	for b in bod:
-		b.get_parent().velocity.y = -300
-		b.get_parent().is_sprung()
+		if b.get_parent().may_spring():
+			b.get_parent().velocity.y = -300
+			b.get_parent().is_sprung()
 		
 func is_sprung():
 	pass
+	
+func may_spring():
+	return true
 
 func _physics_process(delta):
 	

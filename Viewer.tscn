@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://ui/helper.png" type="Texture" id=1]
 [ext_resource path="res://SceneTransition.tscn" type="PackedScene" id=2]
@@ -20,6 +20,10 @@
 [ext_resource path="res://lmms/main_music_two.ogg" type="AudioStream" id=18]
 [ext_resource path="res://lmms/main_music.ogg" type="AudioStream" id=19]
 [ext_resource path="res://sound/lever.wav" type="AudioStream" id=20]
+[ext_resource path="res://sfxia/main_transition_maybe.wav" type="AudioStream" id=21]
+[ext_resource path="res://sfxia/death_2_mod.wav" type="AudioStream" id=22]
+[ext_resource path="res://lmms/menu_music.ogg" type="AudioStream" id=23]
+[ext_resource path="res://MenuMusic.gd" type="Script" id=24]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -79,6 +83,7 @@ __meta__ = {
 [node name="Menu" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+script = ExtResource( 24 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -118,34 +123,26 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Music" type="AudioStreamPlayer" parent="Menu"]
+stream = ExtResource( 23 )
+bus = "Music"
+
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 256, 150 )
+handle_input_locally = false
 render_target_v_flip = true
 render_target_update_mode = 3
 script = ExtResource( 3 )
 
 [node name="SceneTransition" parent="Viewport" instance=ExtResource( 2 )]
 
-[node name="UI" type="Control" parent="Viewport"]
-visible = false
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Normal" type="AudioStreamPlayer" parent="Viewport/SceneTransition"]
+stream = ExtResource( 21 )
+volume_db = -4.0
 
-[node name="Control" type="Control" parent="Viewport/UI"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ReferenceRect" type="ReferenceRect" parent="Viewport/UI/Control"]
-margin_right = 256.0
-margin_bottom = 150.0
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
+[node name="Death" type="AudioStreamPlayer" parent="Viewport/SceneTransition"]
+stream = ExtResource( 22 )
+volume_db = -6.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Viewport"]
 layer = -1

@@ -220,6 +220,7 @@ autoplay = "Cutscene"
 anims/Cutscene = SubResource( 5 )
 
 [node name="Sprite2" type="Sprite" parent="."]
+modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
 position = Vector2( 78, 208 )
 z_index = -5
 texture = ExtResource( 1 )

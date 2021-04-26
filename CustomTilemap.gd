@@ -22,6 +22,11 @@ func helper(tilemap, loc, id):
 	var ur = tilemap.get_cellv(loc + Vector2(1, -1)) == id
 	var dr = tilemap.get_cellv(loc + Vector2(1, 1)) == id
 	
+	if l and r and not u and not d:
+		return Vector2(1 + amod(loc.x, 6), 0)
+		
+	if not l and r and not u and not d:
+		return Vector2(0, 0)
 	
 	if d and l and r and u:
 		var u2 = tilemap.get_cellv(loc + Vector2(0, -2)) == id

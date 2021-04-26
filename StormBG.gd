@@ -21,14 +21,17 @@ func amod(a, b):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	var vis = true
+	
 	if Global.player != null:
 		var f = Global.player.the_flag
-		var vis = flag == f
-		$Sprite.visible = vis
-		$Sprite2.visible = vis
-		$Sprite3.visible = vis
-		$Sprite4.visible = vis
-		$Sprite5.visible = vis
+		vis = flag == f
+		
+	$Sprite.visible = vis
+	$Sprite2.visible = vis
+	$Sprite3.visible = vis
+	$Sprite4.visible = vis
+	$Sprite5.visible = vis
 	
 	$Sprite.region_rect.position.x = amod($Sprite.region_rect.position.x + 3 * speed * delta, 512)
 	$Sprite2.region_rect.position.x = amod($Sprite2.region_rect.position.x + -5 * speed * delta, 512)

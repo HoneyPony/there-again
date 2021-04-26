@@ -18,6 +18,10 @@ func fade_out(callback, lost=false):
 	$AnimationPlayer.queue("FadeOut")
 	next_callback = callback
 	
+	if lost:
+		$Death.play()
+	else:
+		$Normal.play()
 	
 	
 func fade_in():

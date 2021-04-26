@@ -58,10 +58,14 @@ var is_dead = false
 onready var spring_col = get_node("SpringDetect/Col")
 
 var JumpPuff = preload("res://JumpPuff.tscn")
+var JumpPuff2 = preload("res://JumpPuff2.tscn")
 var StepPuff1 = preload("res://StepPuff1.tscn")
 var StepPuff2 = preload("res://StepPuff2.tscn")
 var StepPuff3 = preload("res://StepPuff3.tscn")
 var StepPuff4 = preload("res://StepPuff4.tscn")
+
+var ThrowPuff = preload("res://ThrowPuff.tscn")
+var JumpItemPuff = preload("res://JumpItemPuff.tscn")
 
 func get_step_puff():
 	var puffs = [StepPuff1, StepPuff2, StepPuff3, StepPuff4]
@@ -77,29 +81,50 @@ func puffpos(node):
 	return global_position + Vector2(x, node.position.y)
 
 func stepfx1():
+	footstep()
+	
+	if randf() < 0.2:
+		return
+	
 	var p = get_step_puff()
 	p.position = puffpos($StepLoc1)
 	p.get_node("Sprite").flip_h = randf() < 0.5
 	get_parent().add_child(p)
 	
-	footstep()
+	
 	
 func stepfx2():
+	if randf() < 0.5:
+		return
+	
 	var p = get_step_puff()
 	p.position = puffpos($StepLoc2)
 	p.get_node("Sprite").flip_h = randf() < 0.5
 	get_parent().add_child(p)
 	
 	#sfootstep()
+	
+func jumpitempuff():
+	var puff = JumpItemPuff.instance()
+	puff.position = position + Vector2(0, -4)
+	puff.get_node("Sprite").flip_h = facing_sign < 0
+	get_parent().add_child(puff)
 
 func begin_control_jump(amount = 0):
+	if velocity.y < -200:
+		# Failsafe -- can't jump when jumping so fast
+		return
+	
 	if amount == 0:
 		amount = total_jump_imp
 	remaining_jump_impulse = amount
 	jump_chunk = amount * 0.12
 	velocity.y = 0
 	
-	var puff = JumpPuff.instance()
+	var ps = JumpPuff
+	if randf() < 0.5:
+		ps = JumpPuff2
+	var puff = ps.instance()
 	puff.position = position
 	puff.get_node("Sprite").flip_h = randf() < 0.5
 	get_parent().add_child(puff)
@@ -254,6 +279,14 @@ func _physics_process(delta):
 			held_item.velocity.x = held_item.max_h * facing_sign
 			held_item = null
 			
+			var puff = ThrowPuff.instance()
+			var poffset = $ThrowPuffP.position
+			poffset.x *= facing_sign
+			puff.position = position + poffset
+			puff.get_node("Sprite").flip_h = facing_sign < 0
+			
+			get_parent().add_child(puff)
+			
 	camera.update_camera(position)
 #	for b in $Bounce.get_overlapping_bodies():
 #		if _on_Bounce_body_entered(b):
@@ -270,14 +303,23 @@ func _physics_process(delta):
 		
 func is_sprung():
 	$SpringJump.play()
+	jumpitempuff()
+
+func may_spring():
+	return remaining_jump_impulse <= 0
 
 func _on_Bounce_body_entered(area):
+	if remaining_jump_impulse > 0:
+		# No jumping while jumping...
+		return
+	
 	var body = area.get_parent()
 	if body.state == 2 and body.move_time > 0.1:
 		body.state = 0
 		body.velocity.x = 0
 		velocity.y = -217 #-216
 		$RockJump.play()
+		jumpitempuff()
 		#has_double_jump = true
 #		return true
 		

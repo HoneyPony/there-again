@@ -100,7 +100,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 11.466, 11.55, 11.928, 14.112 ),
+"times": PoolRealArray( 0, 11.466, 11.55, 11.97, 14.112 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
 "values": [ false, true, false, true, false ]
@@ -191,6 +191,7 @@ autoplay = "Cutscene"
 anims/Cutscene = SubResource( 5 )
 
 [node name="Sprite2" type="Sprite" parent="."]
+modulate = Color( 0.803922, 0.803922, 0.803922, 1 )
 position = Vector2( 78, 208 )
 z_index = -5
 texture = ExtResource( 10 )

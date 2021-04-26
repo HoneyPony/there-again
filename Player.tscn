@@ -372,6 +372,9 @@ bus = "FX"
 stream = ExtResource( 13 )
 volume_db = -4.0
 bus = "FX"
+
+[node name="ThrowPuffP" type="Position2D" parent="."]
+position = Vector2( 9, -10 )
 [connection signal="area_entered" from="Bounce" to="." method="_on_Bounce_body_entered"]
 [connection signal="body_entered" from="Bounce" to="." method="_on_Bounce_body_entered"]
 [connection signal="body_entered" from="Hazard" to="." method="_on_Hazard_body_entered"]
